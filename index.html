@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Starbucks Intelligence Dashboard</title>
+    <meta name="description" content="대한민국 스타벅스 매장 분포 및 성장 데이터 인텔리전스 대시보드">
+    
+    <!-- Google Fonts: Inter & Outfit -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;600;700&display=swap" rel="stylesheet">
+
+    <!-- Leaflet & MarkerCluster -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.4.1/dist/MarkerCluster.css" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.4.1/dist/MarkerCluster.Default.css" />
+
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="dark-theme">
+    <div id="app-shell">
+        <!-- Sidebar -->
+        <aside id="sidebar" class="glass-panel">
+            <div class="sidebar-header">
+                <div class="logo-group">
+                    <svg viewBox="0 0 100 100" class="starbucks-logo">
+                        <circle cx="50" cy="50" r="45" fill="#00704A" />
+                        <path d="M50 20 L55 35 L70 35 L58 45 L63 60 L50 50 L37 60 L42 45 L30 35 L45 35 Z" fill="#FFF" />
+                    </svg>
+                    <span class="brand-text">STARBUCKS<br><small>INTELLIGENCE</small></span>
+                </div>
+            </div>
+
+            <nav class="sidebar-nav">
+                <div class="nav-section">
+                    <label>지역 필터</label>
+                    <select id="sido-filter" class="custom-select">
+                        <option value="all">전국 (All)</option>
+                        <!-- Options will be populated by JS -->
+                    </select>
+                </div>
+                
+                <div class="nav-section stats-summary">
+                    <label>데이터 요약</label>
+                    <div class="mini-stat">
+                        <span class="label">서울 비중</span>
+                        <span class="value" id="seoul-ratio">--%</span>
+                    </div>
+                    <div class="mini-stat">
+                        <span class="label">신규 매장 (2026)</span>
+                        <span class="value" id="new-store-count">--개</span>
+                    </div>
+                </div>
+            </nav>
+
+            <div class="sidebar-footer">
+                <p>© 2026 Starbucks Analysts</p>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main id="main-content">
+            <!-- Top Header Stats -->
+            <header class="dashboard-header">
+                <div class="kpi-grid">
+                    <div class="kpi-card glass-panel" data-animate="fade-up">
+                        <div class="kpi-icon store-icon"></div>
+                        <div class="kpi-data">
+                            <span class="kpi-label">전체 매장 수</span>
+                            <span class="kpi-value" id="total-stores">2,134</span>
+                            <span class="kpi-trend pos">+140 vs Last Year</span>
+                        </div>
+                    </div>
+                    <div class="kpi-card glass-panel" data-animate="fade-up" style="animation-delay: 0.1s;">
+                        <div class="kpi-icon dt-icon"></div>
+                        <div class="kpi-data">
+                            <span class="kpi-label">DT 매장 비중</span>
+                            <span class="kpi-value">2,134</span>
+                            <span class="kpi-trend">Core Strategy</span>
+                        </div>
+                    </div>
+                    <div class="kpi-card glass-panel" data-animate="fade-up" style="animation-delay: 0.2s;">
+                        <div class="kpi-icon reserve-icon"></div>
+                        <div class="kpi-data">
+                            <span class="kpi-label">리저브 매장</span>
+                            <span class="kpi-value">Premium</span>
+                            <span class="kpi-trend">High-end Focus</span>
+                        </div>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Dashboard Grid -->
+            <div class="dashboard-grid">
+                <!-- Left: Charts -->
+                <section class="charts-section">
+                    <div class="chart-container glass-panel">
+                        <h3>지역별 매장 분포 (Top 8)</h3>
+                        <canvas id="region-chart"></canvas>
+                    </div>
+                    <div class="chart-container glass-panel">
+                        <h3>연도별 개점 추이</h3>
+                        <canvas id="trend-chart"></canvas>
+                    </div>
+                </section>
+
+                <!-- Right: Map -->
+                <section class="map-section glass-panel">
+                    <div id="map-header">
+                        <h3>실시간 매장 위치망</h3>
+                        <div id="map-controls">
+                            <span id="map-store-count">전국 매장 표시 중</span>
+                        </div>
+                    </div>
+                    <div id="map"></div>
+                </section>
+            </div>
+        </main>
+    </div>
+
+    <!-- Overlay Details -->
+    <div id="details-overlay" class="glass-panel">
+        <button id="close-overlay">×</button>
+        <div id="details-content">
+            <!-- Populated by JS -->
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="https://unpkg.com/leaflet.markercluster@1.4.1/dist/leaflet.markercluster.js"></script>
+    
+    <!-- Data and Dashboard Logic -->
+    <script src="stores_data.js"></script>
+    <script src="dashboard.js"></script>
+</body>
+</html>
